@@ -1,0 +1,904 @@
+
+ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 1
+
+
+
+
+
+       MCS-51 Family Macro Assembler   A S E M - 5 1   V 1.3
+       =====================================================
+
+
+
+	Source File:	D:\Semester 7\Microprocessor\FINAL\2T\Asmbely Code\Memory_Game.asm
+	Object File:	D:\Semester 7\Microprocessor\FINAL\2T\Asmbely Code\Memory_Game.hex
+	List File:	D:\Semester 7\Microprocessor\FINAL\2T\Asmbely Code\Memory_Game.lst
+
+
+
+ Line  I  Addr  Code            Source
+
+    1:
+    2:		B      0097	RED_LED EQU P1.7
+    3:		B      0096	BLUE_LED EQU P1.6
+    4:		D      00A0	LED_PORT EQU P2
+    5:		B	 90	RS BIT P1.0
+    6:		B	 91	E  BIT P1.1
+    7:		D      00B0	SEVEN_SEGMENT EQU P3
+    8:		D      0080	BUTTON_PORT EQU P0
+    9:
+   10:				;MAIN
+   11:
+   12:				;------------------------------------------------
+   13:
+   14:
+   15:		N      0000	ORG 00H
+   16:
+   17:	  0000	7A 00		MOV R2,#0
+   18:	  0002	02 01 00	JMP MAIN
+   19:		N      000B	ORG 000BH
+   20:	  000B	02 03 36	 JMP ISRT0
+   21:
+   22:
+   23:
+   24:
+   25:
+   26:		N      0100	ORG 0100H
+   27:
+   28:	  0100			MAIN:
+   29:				;================== TO BE DELETED JUST FOR TESTING LEVELS
+   30:				   ; MOV R6,#12
+   31:				    ;JMP LEVEL_3
+   32:
+   33:				;===============
+   34:
+   35:	  0100	75 A0 00	MOV LED_PORT , #00H
+   36:	  0103			LEVEL_1:
+   37:	  0103	75 A0 00		MOV LED_PORT,#0H
+   38:	  0106	90 04 26		MOV DPTR,#LCD_L1
+   39:	  0109	7E 00			MOV R6 ,#0
+   40:	  010B	51 98			ACALL LCD
+   41:	  010D	90 04 00		MOV DPTR ,#LEVEL1
+   42:	  0110	7B 04			MOV R3 ,#04H
+   43:	  0112	7D 09			MOV R5 , #9H
+
+ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 2
+
+
+
+ Line  I  Addr  Code            Source
+
+   44:	  0114	51 79			ACALL VIEW_LED
+   45:
+   46:	  0116	7F 04			MOV R7 ,#04H
+   47:	  0118	90 04 00		MOV DPTR ,#LEVEL1
+   48:	  011B	31 F1			ACALL GAME
+   49:	  011D	90 04 5E		MOV DPTR,#PASS
+   50:	  0120	51 98			ACALL LCD
+   51:	  0122	02 01 25		JMP LEVEL_2
+   52:	  0125			LEVEL_2:
+   53:	  0125	75 A0 00		MOV LED_PORT,#0H
+   54:	  0128	71 53		        ACALL RESET_TIMER
+   55:	  012A	90 04 2E		MOV DPTR,#LCD_L2
+   56:	  012D	51 98			ACALL LCD
+   57:	  012F	90 04 04		MOV DPTR ,#LEVEL2
+   58:	  0132	7B 05			MOV R3 ,#05H
+   59:	  0134	7D 08			MOV R5 , #8H
+   60:	  0136	51 79			ACALL VIEW_LED
+   61:	  0138	7F 05			MOV R7 ,#05H
+   62:	  013A	90 04 04		MOV DPTR ,#LEVEL2
+   63:	  013D	31 F1			ACALL GAME
+   64:	  013F	90 04 5E		MOV DPTR,#PASS
+   65:	  0142	51 98			ACALL LCD
+   66:	  0144	02 01 47		JMP LEVEL_3
+   67:	  0147			LEVEL_3:
+   68:	  0147	75 A0 00		MOV LED_PORT,#0H
+   69:	  014A	71 53		        ACALL RESET_TIMER
+   70:	  014C	90 04 36		MOV DPTR,#LCD_L3
+   71:	  014F	51 98			ACALL LCD
+   72:	  0151	90 04 09		MOV DPTR ,#LEVEL3
+   73:	  0154	7B 05			MOV R3 ,#05H
+   74:	  0156	7D 07			MOV R5 , #7H
+   75:	  0158	51 79			ACALL VIEW_LED
+   76:	  015A	7F 05			MOV R7 ,#05H
+   77:	  015C	90 04 09		MOV DPTR ,#LEVEL3
+   78:	  015F	31 F1			ACALL GAME
+   79:	  0161	90 04 5E		MOV DPTR,#PASS
+   80:	  0164	51 98			ACALL LCD
+   81:	  0166	02 01 69		JMP LEVEL_4
+   82:
+   83:	  0169			LEVEL_4:
+   84:	  0169	75 A0 00		MOV LED_PORT,#0H
+   85:	  016C	71 53		        ACALL RESET_TIMER
+   86:	  016E	90 04 3E		MOV DPTR,#LCD_L4
+   87:	  0171	51 98			ACALL LCD
+   88:	  0173	90 04 0E		MOV DPTR ,#LEVEL4
+   89:	  0176	7B 06			MOV R3 ,#06H
+   90:	  0178	7D 06			MOV R5 , #6H
+   91:	  017A	51 79			ACALL VIEW_LED
+   92:	  017C	7F 06			MOV R7 ,#06H
+   93:	  017E	90 04 0E		MOV DPTR ,#LEVEL4
+   94:	  0181	31 F1			ACALL GAME
+   95:	  0183	90 04 5E		MOV DPTR,#PASS
+   96:	  0186	51 98			ACALL LCD
+   97:	  0188	02 01 8B		JMP LEVEL_5
+   98:
+   99:	  018B			LEVEL_5:
+
+ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 3
+
+
+
+ Line  I  Addr  Code            Source
+
+  100:	  018B	75 A0 00		MOV LED_PORT,#0H
+  101:	  018E	71 53		        ACALL RESET_TIMER
+  102:	  0190	90 04 46		MOV DPTR,#LCD_L5
+  103:	  0193	51 98			ACALL LCD
+  104:	  0195	90 04 14		MOV DPTR ,#LEVEL5
+  105:	  0198	7B 05			MOV R3 ,#05H
+  106:	  019A	7D 04			MOV R5 , #4H
+  107:	  019C	51 79			ACALL VIEW_LED
+  108:	  019E	7F 06			MOV R7 ,#06H
+  109:	  01A0	90 04 14		MOV DPTR ,#LEVEL5
+  110:	  01A3	31 F1			ACALL GAME
+  111:	  01A5	90 04 5E		MOV DPTR,#PASS
+  112:	  01A8	51 98			ACALL LCD
+  113:	  01AA	02 01 AD		JMP LEVEL_6
+  114:
+  115:	  01AD			LEVEL_6:
+  116:	  01AD	75 A0 00		MOV LED_PORT,#0H
+  117:	  01B0	71 53			ACALL RESET_TIMER
+  118:	  01B2	90 04 4E		MOV DPTR,#LCD_L6
+  119:	  01B5	51 98			ACALL LCD
+  120:	  01B7	90 04 1A		MOV DPTR ,#LEVEL6
+  121:	  01BA	7B 06			MOV R3 ,#06H
+  122:	  01BC	7D 08			MOV R5 , #8H
+  123:	  01BE	51 79			ACALL VIEW_LED
+  124:	  01C0	7F 06			MOV R7 ,#06H
+  125:	  01C2	90 04 1A		MOV DPTR ,#LEVEL6
+  126:	  01C5	31 F1			ACALL GAME
+  127:	  01C7	90 04 5E		MOV DPTR,#PASS
+  128:	  01CA	51 98			ACALL LCD
+  129:	  01CC	02 01 CF		JMP LEVEL_7
+  130:	  01CF			LEVEL_7:
+  131:	  01CF	75 A0 00		MOV LED_PORT,#0H
+  132:	  01D2	71 53		        ACALL RESET_TIMER
+  133:	  01D4	90 04 56		MOV DPTR,#LCD_L7
+  134:	  01D7	51 98			ACALL LCD
+  135:	  01D9	90 04 20		MOV DPTR ,#LEVEL7
+  136:	  01DC	7B 06			MOV R3 ,#06H
+  137:	  01DE	7D 08			MOV R5 , #8H
+  138:	  01E0	51 79			ACALL VIEW_LED
+  139:	  01E2	7F 06			MOV R7 ,#06H
+  140:	  01E4	90 04 20		MOV DPTR ,#LEVEL7
+  141:	  01E7	31 F1			ACALL GAME
+  142:	  01E9	90 04 65		MOV DPTR,#WON
+  143:	  01EC	51 98			ACALL LCD
+  144:	  01EE	02 02 96		JMP EXIT
+  145:				;------------------------------------------------
+  146:	  01F1			GAME:
+  147:	  01F1	71 1F		        ACALL START_TIMER ; START THE TIMER AT THE BEGINNING OF EVERY LEVEL
+  148:	  01F3			IS_PRESSED:			;CHECK THE TIMER WHILE WAITING FOR THE USER TO PRESS A BUTTON
+  149:	  01F3	BC 00 03	        CJNE R4,#0,NATURAL_FLOW ;IF NOT EQUAL ZERO ACCEPT THE PRESSED BUTTON ELSE
+  150:	  01F6	02 02 62	        JMP NOT_EQ		;JUMP TO NOT EQUAL
+  151:
+  152:
+  153:	  01F9			NATURAL_FLOW:
+  154:
+  155:	  01F9	75 80 FF			MOV P0, #0FFH
+
+ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 4
+
+
+
+ Line  I  Addr  Code            Source
+
+  156:	  01FC	30 80 17			JNB P0.0 , B1
+  157:	  01FF	30 81 19			JNB P0.1 , B2
+  158:	  0202	30 82 1B			JNB P0.2 , B3
+  159:	  0205	30 83 1D			JNB P0.3 , B4
+  160:	  0208	30 84 1F			JNB P0.4 , B5
+  161:	  020B	30 85 21			JNB P0.5 , B6
+  162:	  020E	30 86 23			JNB P0.6 , B7
+  163:	  0211	30 87 25			JNB P0.7 , B8
+  164:	  0214	80 DD				SJMP  IS_PRESSED
+  165:				;------------------------------------------------
+  166:	  0216				B1:
+  167:	  0216	7B 01				MOV R3,#01H
+  168:	  0218	02 02 3E			JMP COMPARE
+  169:	  021B				B2:
+  170:	  021B	7B 02				MOV R3,#02H
+  171:	  021D	02 02 3E			JMP COMPARE
+  172:	  0220				B3:
+  173:	  0220	7B 04				MOV R3,#04H
+  174:	  0222	02 02 3E			JMP COMPARE
+  175:	  0225				B4:
+  176:	  0225	7B 08				MOV R3,#08H
+  177:	  0227	02 02 3E			JMP COMPARE
+  178:	  022A				B5:
+  179:	  022A	7B 10				MOV R3,#10H
+  180:	  022C	02 02 3E			JMP COMPARE
+  181:	  022F				B6:
+  182:	  022F	7B 20				MOV R3,#20H
+  183:	  0231	02 02 3E			JMP COMPARE
+  184:	  0234				B7:
+  185:	  0234	7B 40				MOV R3,#40H
+  186:	  0236	02 02 3E			JMP COMPARE
+  187:	  0239				B8:
+  188:	  0239	7B 80				MOV R3,#80H
+  189:	  023B	02 02 3E			JMP COMPARE
+  190:				;------------------------------------------------
+  191:	  023E				COMPARE:
+  192:	  023E	E5 80				MOV A , BUTTON_PORT
+  193:	  0240	F4				CPL A
+  194:	  0241	F5 A0				MOV LED_PORT,A
+  195:	  0243	E4				CLR A
+  196:	  0244	93				MOVC A ,@A+DPTR
+  197:						;SUBB A,R6
+  198:						;JNZ NOT_EQ
+  199:	  0245	F4				CPL A
+  200:	  0246	5B				ANL A,R3
+  201:	  0247	B4 00 18			CJNE A,#0,NOT_EQ
+  202:
+  203:	  024A	C2 97				CLR  RED_LED            ;IF EQUAL, RED LED OFF
+  204:	  024C	D2 96				SETB   BLUE_LED            ;BLUE LED ON
+  205:	  024E	75 F0 09			MOV   B, #9           ;COUNTER B INITIAL VALUE = 9 FOR DELAY
+  206:	  0251					LOOP2:
+  207:	  0251	51 8B					ACALL DELAY           ;APPLY SOME DELAY
+  208:	  0253	D5 F0 FB				DJNZ  B, LOOP2        ;DECREMENT COUNTER B, JUMP IF NOT 0
+  209:	  0256	C2 96				CLR  BLUE_LED            ;BLUE LED OFF
+  210:	  0258	A3				INC DPTR
+  211:	  0259	DF 98				DJNZ  R7, IS_PRESSED
+
+ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 5
+
+
+
+ Line  I  Addr  Code            Source
+
+  212:
+  213:
+  214:						;PASSED CASE MEANS THAT USER SUCCEEDED IN PATTERN WE WILL UPDATE SCORE AND RETURN
+  215:						;--------------------------------
+  216:	  025B	8E F0				MOV B,R6 ; CURRENT VALUE OF SCORE
+  217:	  025D	EC				MOV A,R4 ; MOV THE REMAING TIME THAT IS STORED IN R4 TO THE ACCUMLATOR
+  218:	  025E	25 F0				ADD A ,B ; ADD THE DIFFERENCE IN TIME TO THE CURRENT VALUE OF SCORE
+  219:	  0260	FE				MOV R6,A ; RESTORE THE NEW SCORE TO THE R6 REGISTER
+  220:
+  221:						;---------------------------------------
+  222:
+  223:	  0261	22		RET
+  224:				;------------------------------------------------
+  225:
+  226:	  0262	71 53		NOT_EQ:  ACALL RESET_TIMER
+  227:	  0264	D2 97			SETB   RED_LED            ;RED LED ON
+  228:	  0266	75 F0 09		MOV   B, #9           ;COUNTER B INITIAL VALUE = 9
+  229:	  0269				LOOP3:
+  230:	  0269	51 8B				ACALL DELAY
+  231:	  026B	D5 F0 FB			DJNZ B , LOOP3         ;APPLY SOME DELAY
+  232:	  026E	C2 97			CLR  RED_LED
+  233:
+  234:					;HERE WE SHOULD CHECK THE SCORE
+  235:	  0270	71 5B			ACALL CHECK_SCORE_AFTER_LOSS
+  236:
+  237:
+  238:	  0272	90 04 6D		MOV DPTR,#LOST
+  239:	  0275	51 98			ACALL LCD
+  240:	  0277	80 FE			JMP $
+  241:				;------------------------------------------------
+  242:	  0279			VIEW_LED:
+  243:	  0279	E4			CLR A
+  244:	  027A	93			MOVC A ,@A+DPTR
+  245:					;CPL   A
+  246:	  027B	F5 A0			MOV LED_PORT ,A
+  247:	  027D	8D F0			MOV B , R5
+  248:	  027F				LOOP0:
+  249:	  027F	51 8B				ACALL DELAY
+  250:	  0281	D5 F0 FB			DJNZ  B, LOOP0
+  251:	  0284	A3			INC DPTR
+  252:	  0285	DB F2			DJNZ R3,VIEW_LED
+  253:	  0287	75 A0 00		MOV LED_PORT,#0
+  254:	  028A	22		RET
+  255:
+  256:
+  257:				;------------------------------------------------
+  258:
+  259:	  028B			DELAY:
+  260:	  028B	74 BB			MOV   A, #0BBH
+  261:	  028D			LOOP4:
+  262:	  028D	79 BB			MOV   R1, #0BBH
+  263:	  028F			LOOP5:
+  264:
+  265:	  028F	D9 FE			DJNZ  R1, LOOP5
+  266:	  0291	14			DEC A
+  267:	  0292	B5 00 F8		CJNE A,0,LOOP4
+
+ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 6
+
+
+
+ Line  I  Addr  Code            Source
+
+  268:
+  269:
+  270:	  0295	22		RET
+  271:				;------------------------------------------------
+  272:	  0296			EXIT:
+  273:	  0296	80 FE			JMP $
+  274:				;--------------------------------------------------
+  275:	  0298			LCD:
+  276:
+  277:	  0298	74 02			MOV A, #02H
+  278:	  029A	12 02 E9		CALL CMDWRITE
+  279:
+  280:	  029D	74 28			MOV A, #28H
+  281:	  029F	12 02 E9		CALL CMDWRITE
+  282:
+  283:	  02A2	74 0C			MOV A, #0CH
+  284:	  02A4	12 02 E9		CALL CMDWRITE
+  285:
+  286:
+  287:	  02A7	74 01			MOV A, #01H
+  288:	  02A9	12 02 E9		CALL CMDWRITE
+  289:
+  290:
+  291:					;BEGIN AT 5TH COL, 1ST LINE
+  292:	  02AC	74 84			MOV A, #84H
+  293:	  02AE	12 02 E9		CALL CMDWRITE
+  294:
+  295:	  02B1	E4			S1:	CLR A
+  296:	  02B2	93				MOVC A, @A+DPTR
+  297:	  02B3	60 05				JZ NEXT
+  298:	  02B5	71 04				ACALL DATAWRITE
+  299:						;ACALL DELAY
+  300:
+  301:
+  302:	  02B7	A3				INC DPTR
+  303:	  02B8	80 F7				SJMP S1
+  304:
+  305:	  02BA			NEXT:
+  306:				 ;==========
+  307:
+  308:	  02BA	74 C0		         MOV A,#0C0H ;MAKES NEW LINE
+  309:	  02BC	51 E9			 ACALL CMDWRITE
+  310:
+  311:	  02BE	90 04 78	         MOV DPTR,#SCORE_MESSAGE
+  312:	  02C1			 SCORE_VIEW:
+  313:	  02C1	E4		         CLR A
+  314:	  02C2	93			 MOVC A,@A+DPTR
+  315:	  02C3	60 05			 JZ SCORE_VALUE_VIEW
+  316:	  02C5	71 04			 ACALL DATAWRITE
+  317:	  02C7	A3			 INC DPTR
+  318:	  02C8	80 F7			 SJMP SCORE_VIEW
+  319:
+  320:	  02CA			SCORE_VALUE_VIEW:
+  321:
+  322:	  02CA	E4		                 CLR A ; CLEAR THE A
+  323:	  02CB	EE		                 MOV A,R6 ; MOV THE SCORE TO THE ACUMLATOR
+
+ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 7
+
+
+
+ Line  I  Addr  Code            Source
+
+  324:	  02CC	75 F0 0A	                 MOV B,#10;
+  325:	  02CF	84		                 DIV AB ;
+  326:	  02D0	24 30		                 ADD A,#30H ; CONVERT THE VALUE TO A CHARCTER
+  327:	  02D2	71 04		                 ACALL DATAWRITE;SEND THE TENS
+  328:
+  329:	  02D4	E5 F0		                 MOV A,B
+  330:	  02D6	24 30		                 ADD A,#30H
+  331:	  02D8	71 04		                 ACALL DATAWRITE;SEND THE UNITS
+  332:
+  333:
+  334:
+  335:				                ; ADD A,#30H
+  336:				                 ;ADD A,R6
+  337:				                 ;ACALL DATAWRITE
+  338:
+  339:
+  340:
+  341:
+  342:
+  343:				;==========
+  344:
+  345:	  02DA			EE:
+  346:
+  347:	  02DA	22		RET
+  348:
+  349:				;-----------------------------------------------------------
+  350:				; SUBROUTINES TO ADJUST THE NIBBLES TO MATCH THE LCD DATA BUS
+  351:	  02DB			HIGH_NIBBLE_ADJUST:
+  352:	  02DB	54 F0			ANL A, #11110000B ;MASK HIGHER NIBBLE
+  353:	  02DD	03			RR A
+  354:	  02DE	03			RR A
+  355:
+  356:	  02DF	22		RET
+  357:				;-----------------------------------------------------------
+  358:	  02E0			LOW_NIBBLE_ADJUST:
+  359:	  02E0	23			RL A
+  360:	  02E1	23			RL A
+  361:	  02E2	23			RL A
+  362:	  02E3	23			RL A
+  363:	  02E4	54 F0			ANL A, #11110000B ;MASK HIGHER NIBBLE
+  364:	  02E6	03			RR A
+  365:	  02E7	03			RR A
+  366:
+  367:	  02E8	22		RET
+  368:				;------------------------------------------------------------
+  369:	  02E9			CMDWRITE:
+  370:					; THE DATA NEEDS TO BE ADJUSTED SO THE NIBBLE CAN BE PLACED IN THE 5, 4, 3, 2 OUT OF (7 ~ 0)
+				 BITS
+  371:	  02E9	F8			MOV R0, A ;MAKE A COPY OF THE COMMAND
+  372:	  02EA	51 DB			CALL HIGH_NIBBLE_ADJUST
+  373:	  02EC	F5 90			MOV P1, A
+  374:	  02EE	C2 90			CLR RS
+  375:	  02F0	D2 91			SETB E
+  376:	  02F2	51 8B			CALL DELAY
+  377:	  02F4	C2 91			CLR E
+  378:
+
+ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 8
+
+
+
+ Line  I  Addr  Code            Source
+
+  379:
+  380:					;PREPARE THE LOWER NIBBLE BY SHIFTING
+  381:	  02F6	E8			MOV A, R0
+  382:	  02F7	51 E0			CALL LOW_NIBBLE_ADJUST
+  383:	  02F9	F5 90			MOV P1, A
+  384:	  02FB	C2 90			CLR RS
+  385:	  02FD	D2 91			SETB E
+  386:	  02FF	51 8B			CALL DELAY
+  387:	  0301	C2 91			CLR E
+  388:
+  389:					;CALL DELAY
+  390:	  0303	22		RET
+  391:				;-------------------------------------------------------
+  392:				;;;; DATA WRITE SUBROUTINE FOR 4-BIT MODE;;;;
+  393:	  0304			DATAWRITE:
+  394:	  0304	F8		        MOV R0, A ;MAKE A COPY OF THE DATA
+  395:	  0305	51 DB			CALL HIGH_NIBBLE_ADJUST
+  396:	  0307	F5 90			MOV P1, A
+  397:	  0309	D2 90			SETB RS
+  398:	  030B	D2 91			SETB E
+  399:	  030D	51 8B			CALL DELAY
+  400:	  030F	C2 91			CLR E
+  401:
+  402:					; PREPARE THE LOWER NIBBLE BY SHIFTING
+  403:	  0311	E8			MOV A, R0
+  404:	  0312	51 E0			CALL LOW_NIBBLE_ADJUST
+  405:	  0314	F5 90			MOV P1, A
+  406:	  0316	D2 90			SETB RS
+  407:	  0318	D2 91			SETB E
+  408:	  031A	51 8B			CALL DELAY
+  409:	  031C	C2 91			CLR E
+  410:
+  411:					;CALL DELAY
+  412:	  031E	22		RET
+  413:				;------------------------------------------------
+  414:
+  415:	  031F			START_TIMER:
+  416:
+  417:
+  418:	  031F	75 A8 82	       MOV IE, #10000010B	;ENABLE EXTERNAL INTERRUPTS ET0, EX0
+  419:	  0322	D2 88		        SETB IT0 ; NEGATIVE EDGE TRIGGER FOR INTERRUPT 0
+  420:
+  421:	  0324	7A 00		     	MOV R2,#0 ; NUMBER OF OVERFLOWS
+  422:	  0326	7C 09			MOV R4,#9
+  423:	  0328	8C B0			MOV SEVEN_SEGMENT,R4
+  424:
+  425:	  032A	75 89 01		MOV TMOD, #00000001B ; TIMER 0 AS 16-BIT TIMERS
+  426:
+  427:
+  428:
+  429:				;TIMER CLK = 11.0592/12*1 = 0.9216 MHZ (1 CYCLE = 1.085.... µS)
+  430:					;   50000 US = (65536 - COUNT) * (1 / 0.9216). COUNT = 19456 => 4C00H
+  431:					;OR 50000 US / (1 / 0.9216) US = 19456 (65536 - 19456 = 19456 => 4C00H)
+  432:
+  433:
+  434:	  032D	75 8C 4C	        MOV TH0,#4CH
+
+ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 9
+
+
+
+ Line  I  Addr  Code            Source
+
+  435:	  0330	75 8A 00	        MOV TL0,#00H
+  436:
+  437:	  0333	D2 8C			SETB TR0
+  438:
+  439:
+  440:
+  441:	  0335	22		RET
+  442:
+  443:
+  444:	  0336			ISRT0:
+  445:				; 1 SEC REQUIRES 20 OVERFLOW
+  446:
+  447:
+  448:
+  449:				        ;OVERFLOW TIMER INTERRUPT
+  450:
+  451:	  0336	C2 8C		        CLR TR0
+  452:				        ;RELOAD TIMERS
+  453:	  0338	75 8C 4C	        MOV TH0, #4CH
+  454:	  033B	75 8A 00	        MOV TL0, #00H
+  455:					;CLR TF0
+  456:	  033E	BA 14 0E		CJNE R2 ,#20,NOT_END_YET
+  457:
+  458:	  0341	7A 00			MOV R2,#0; RESTART OVERFLOW COUNTER
+  459:	  0343	1C			DEC R4
+  460:	  0344	8C B0			MOV SEVEN_SEGMENT,R4
+  461:
+  462:	  0346	BC 00 03	        CJNE R4,#0,TIMER_NOT_FINISH
+  463:
+  464:
+  465:
+  466:	  0349	02 03 52	        JMP END_TIMER
+  467:
+  468:
+  469:
+  470:	  034C			TIMER_NOT_FINISH:
+  471:
+  472:	  034C	02 03 50		JMP RESTART_TIMER
+  473:
+  474:
+  475:	  034F			NOT_END_YET:
+  476:	  034F	0A			INC R2
+  477:					;RUN AGAIN
+  478:	  0350	D2 8C		 RESTART_TIMER: SETB TR0
+  479:
+  480:
+  481:	  0352			 END_TIMER:
+  482:
+  483:	  0352	32		        RETI
+  484:
+  485:
+  486:	  0353			RESET_TIMER:
+  487:	  0353	C2 8C		            CLR TR0
+  488:	  0355	7C 09		            MOV R4,#9
+  489:	  0357	75 B0 09	            MOV SEVEN_SEGMENT,#9
+  490:	  035A	22		            RET
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 10
+
+
+
+ Line  I  Addr  Code            Source
+
+  491:
+  492:				;------------------------------------------------------
+  493:
+  494:	  035B			CHECK_SCORE_AFTER_LOSS:
+  495:
+  496:				            ;WE ARE CHECKING ON R6
+  497:
+  498:	  035B	EE		            MOV A,R6
+  499:
+  500:				          ;{CJNE SRC,DEST} : (FIRST ADD SECOND)  IF (FIRST > = SECOND) => [CARRYFLAG = 0] ELSE [CARR
+				YFLAG = 1]
+  501:
+  502:	  035C	B4 0C 04	          CJNE A,#12,CHECK1
+  503:	  035F	71 87		          ACALL TRY_AGAIN_PRINT
+  504:	  0361	21 25		          JMP LEVEL_2 ;IF SCORE = 12
+  505:
+  506:	  0363	40 14		   CHECK1: JC GOTO_LEVEL_1  ; A : SCORE  # A < 12 CARRY FLAG WILL IS 1 # GO TO LEVEL 1
+  507:
+  508:
+  509:
+  510:
+  511:	  0365	B4 14 04	          CJNE A,#20 ,CHECK2 ; IS SCORE LESS THAN 20 JMP TO LEVEL 2
+  512:	  0368	71 87		          ACALL TRY_AGAIN_PRINT
+  513:	  036A	21 47		          JMP LEVEL_3 ; ELSE GO TO LEVEL 3
+  514:
+  515:
+  516:
+  517:
+  518:	  036C	40 0C		   CHECK2:  JC GOTO_LEVEL_2
+  519:
+  520:	  036E	B4 23 04	           CJNE A,#35,CHECK3
+  521:	  0371	71 87		           ACALL TRY_AGAIN_PRINT
+  522:	  0373	21 69		           JMP LEVEL_4
+  523:
+  524:	  0375	40 0B		   CHECK3: JC GOTO_LEVEL_4
+  525:	  0377	21 47		            JMP LEVEL_3  ;IF SCORE <25 BUT GREATER THAN 20
+  526:
+  527:
+  528:	  0379	22		     GOTO_LEVEL_1: RET
+  529:
+  530:
+  531:	  037A	71 87		     GOTO_LEVEL_2 : ACALL TRY_AGAIN_PRINT
+  532:	  037C	21 25		                   JMP LEVEL_2
+  533:
+  534:	  037E	71 87		     GOTO_LEVEL_3 :ACALL TRY_AGAIN_PRINT
+  535:	  0380	21 47		                   JMP LEVEL_3
+  536:
+  537:	  0382	71 87		     GOTO_LEVEL_4 : ACALL TRY_AGAIN_PRINT
+  538:	  0384	21 69		                      JMP LEVEL_4
+  539:
+  540:	  0386	22		RET
+  541:
+  542:	  0387			TRY_AGAIN_PRINT:
+  543:
+  544:	  0387	74 01			MOV A, #01H
+  545:	  0389	51 E9			ACALL CMDWRITE
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 11
+
+
+
+ Line  I  Addr  Code            Source
+
+  546:
+  547:
+  548:					;BEGIN AT 5TH COL, 1ST LINE
+  549:	  038B	74 84			MOV A, #84H
+  550:	  038D	51 E9			ACALL CMDWRITE
+  551:
+  552:
+  553:
+  554:	  038F	90 04 7F	        MOV DPTR,#TRY_AGAIN_MESSAGE
+  555:	  0392	E4		        M:  CLR A
+  556:	  0393	93		           MOVC A,@A+DPTR
+  557:	  0394	60 05		           JZ Z
+  558:	  0396	A3		           INC DPTR
+  559:	  0397	71 04		           ACALL DATAWRITE
+  560:	  0399	80 F7		           SJMP M
+  561:
+  562:	  039B			 Z:
+  563:	  039B	22		 RET
+  564:
+  565:
+  566:
+  567:				;-----------------------------------------------
+  568:		N      0400	ORG 400H
+  569:	  0400	01 02 04 08	  LEVEL1: DB 01H, 02H, 04H, 08H
+  570:	  0404	08 02 04 02	  LEVEL2: DB 08H, 02H, 04H, 02H, 10H
+	  0408	10
+  571:	  0409	04 08 80 20	  LEVEL3: DB 04H, 08H, 80H, 20H, 01H
+	  040D	01
+  572:	  040E	02 80 02 40	  LEVEL4: DB 02H, 80H, 02H, 40H, 01H, 10H
+	  0412	01 10
+  573:	  0414	10 08 01 08	  LEVEL5: DB 10H, 08H, 01H, 08H, 04H, 02H
+	  0418	04 02
+  574:	  041A	04 20 10 02	  LEVEL6: DB 04H, 20H, 10H, 02H, 80H, 04H
+	  041E	80 04
+  575:	  0420	20 80 08 02	  LEVEL7: DB 20H, 80H, 08H, 02H, 10H, 08H
+	  0424	10 08
+  576:				;------------------------------------------
+  577:	  0426	4C 45 56 45	  LCD_L1 : DB "LEVEL 1",0
+	  042A	4C 20 31 00
+  578:	  042E	4C 45 56 45	  LCD_L2 : DB "LEVEL 2",0
+	  0432	4C 20 32 00
+  579:	  0436	4C 45 56 45	  LCD_L3 : DB "LEVEL 3",0
+	  043A	4C 20 33 00
+  580:	  043E	4C 45 56 45	  LCD_L4 : DB "LEVEL 4",0
+	  0442	4C 20 34 00
+  581:	  0446	4C 45 56 45	  LCD_L5 : DB "LEVEL 5",0
+	  044A	4C 20 35 00
+  582:	  044E	4C 45 56 45	  LCD_L6 : DB "LEVEL 6",0
+	  0452	4C 20 36 00
+  583:	  0456	4C 45 56 45	  LCD_L7 : DB "LEVEL 7",0
+	  045A	4C 20 37 00
+  584:
+  585:	  045E	50 41 53 53	  PASS: DB "PASSED",0
+	  0462	45 44 00
+  586:	  0465	59 4F 55 20	  WON: DB "YOU WON",0
+	  0469	57 4F 4E 00
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 12
+
+
+
+ Line  I  Addr  Code            Source
+
+  587:	  046D	47 41 4D 45	  LOST: DB "GAME OVER!",0
+	  0471	20 4F 56 45
+	  0475	52 21 00
+  588:	  0478	53 43 4F 52	  SCORE_MESSAGE: DB "SCORE:",0
+	  047C	45 3A 00
+  589:
+  590:	  047F	54 52 59 20	  TRY_AGAIN_MESSAGE: DB "TRY AGAIN",0
+	  0483	41 47 41 49
+	  0487	4E 00
+  591:
+  592:
+  593:				END
+
+
+
+
+
+                     register banks used:  ---
+
+                     no errors
+
+
+
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 13
+
+
+
+
+
+	       L I S T   O F   S Y M B O L S
+	       =============================
+
+
+SYMBOL				  TYPE     VALUE	LINE
+------------------------------------------------------------
+??ASEM_51			  NUMBER    8051
+??VERSION			  NUMBER    0130
+AC				  BIT	      D6
+ACC				  DATA	      E0
+B				  DATA	      F0
+B1				  CODE	    0216	 166
+B2				  CODE	    021B	 169
+B3				  CODE	    0220	 172
+B4				  CODE	    0225	 175
+B5				  CODE	    022A	 178
+B6				  CODE	    022F	 181
+B7				  CODE	    0234	 184
+B8				  CODE	    0239	 187
+BLUE_LED			  NUMBER    0096	   3
+BUTTON_PORT			  NUMBER    0080	   8
+CHECK1				  CODE	    0363	 506
+CHECK2				  CODE	    036C	 518
+CHECK3				  CODE	    0375	 524
+CHECK_SCORE_AFTER_LOSS		  CODE	    035B	 494
+CMDWRITE			  CODE	    02E9	 369
+COMPARE				  CODE	    023E	 191
+CY				  BIT	      D7
+DATAWRITE			  CODE	    0304	 393
+DELAY				  CODE	    028B	 259
+DPH				  DATA	      83
+DPL				  DATA	      82
+E				  BIT	      91	   6
+EA				  BIT	      AF
+EE				  CODE	    02DA	 345
+END_TIMER			  CODE	    0352	 481
+ES				  BIT	      AC
+ET0				  BIT	      A9
+ET1				  BIT	      AB
+EX0				  BIT	      A8
+EX1				  BIT	      AA
+EXIT				  CODE	    0296	 272
+EXTI0				  CODE	    0003
+EXTI1				  CODE	    0013
+F0				  BIT	      D5
+GAME				  CODE	    01F1	 146
+GOTO_LEVEL_1			  CODE	    0379	 528
+GOTO_LEVEL_2			  CODE	    037A	 531
+GOTO_LEVEL_3			  CODE	    037E	 534
+GOTO_LEVEL_4			  CODE	    0382	 537
+HIGH_NIBBLE_ADJUST		  CODE	    02DB	 351
+IE				  DATA	      A8
+IE0				  BIT	      89
+IE1				  BIT	      8B
+INT0				  BIT	      B2
+INT1				  BIT	      B3
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 14
+
+
+
+SYMBOL				  TYPE     VALUE	LINE
+------------------------------------------------------------
+IP				  DATA	      B8
+ISRT0				  CODE	    0336	 444
+IS_PRESSED			  CODE	    01F3	 148
+IT0				  BIT	      88
+IT1				  BIT	      8A
+LCD				  CODE	    0298	 275
+LCD_L1				  CODE	    0426	 577
+LCD_L2				  CODE	    042E	 578
+LCD_L3				  CODE	    0436	 579
+LCD_L4				  CODE	    043E	 580
+LCD_L5				  CODE	    0446	 581
+LCD_L6				  CODE	    044E	 582
+LCD_L7				  CODE	    0456	 583
+LED_PORT			  NUMBER    00A0	   4
+LEVEL1				  CODE	    0400	 569
+LEVEL2				  CODE	    0404	 570
+LEVEL3				  CODE	    0409	 571
+LEVEL4				  CODE	    040E	 572
+LEVEL5				  CODE	    0414	 573
+LEVEL6				  CODE	    041A	 574
+LEVEL7				  CODE	    0420	 575
+LEVEL_1				  CODE	    0103	  36
+LEVEL_2				  CODE	    0125	  52
+LEVEL_3				  CODE	    0147	  67
+LEVEL_4				  CODE	    0169	  83
+LEVEL_5				  CODE	    018B	  99
+LEVEL_6				  CODE	    01AD	 115
+LEVEL_7				  CODE	    01CF	 130
+LOOP0				  CODE	    027F	 248
+LOOP2				  CODE	    0251	 206
+LOOP3				  CODE	    0269	 229
+LOOP4				  CODE	    028D	 261
+LOOP5				  CODE	    028F	 263
+LOST				  CODE	    046D	 587
+LOW_NIBBLE_ADJUST		  CODE	    02E0	 358
+M				  CODE	    0392	 555
+MAIN				  CODE	    0100	  28
+NATURAL_FLOW			  CODE	    01F9	 153
+NEXT				  CODE	    02BA	 305
+NOT_END_YET			  CODE	    034F	 475
+NOT_EQ				  CODE	    0262	 226
+OV				  BIT	      D2
+P				  BIT	      D0
+P0				  DATA	      80
+P1				  DATA	      90
+P2				  DATA	      A0
+P3				  DATA	      B0
+PASS				  CODE	    045E	 585
+PCON				  DATA	      87
+PS				  BIT	      BC
+PSW				  DATA	      D0
+PT0				  BIT	      B9
+PT1				  BIT	      BB
+PX0				  BIT	      B8
+PX1				  BIT	      BA
+RB8				  BIT	      9A
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 15
+
+
+
+SYMBOL				  TYPE     VALUE	LINE
+------------------------------------------------------------
+RD				  BIT	      B7
+RED_LED				  NUMBER    0097	   2
+REN				  BIT	      9C
+RESET				  CODE	    0000
+RESET_TIMER			  CODE	    0353	 486
+RESTART_TIMER			  CODE	    0350	 478
+RI				  BIT	      98
+RS				  BIT	      90	   5
+RS0				  BIT	      D3
+RS1				  BIT	      D4
+RXD				  BIT	      B0
+S1				  CODE	    02B1	 295
+SBUF				  DATA	      99
+SCON				  DATA	      98
+SCORE_MESSAGE			  CODE	    0478	 588
+SCORE_VALUE_VIEW		  CODE	    02CA	 320
+SCORE_VIEW			  CODE	    02C1	 312
+SEVEN_SEGMENT			  NUMBER    00B0	   7
+SINT				  CODE	    0023
+SM0				  BIT	      9F
+SM1				  BIT	      9E
+SM2				  BIT	      9D
+SP				  DATA	      81
+START_TIMER			  CODE	    031F	 415
+T0				  BIT	      B4
+T1				  BIT	      B5
+TB8				  BIT	      9B
+TCON				  DATA	      88
+TF0				  BIT	      8D
+TF1				  BIT	      8F
+TH0				  DATA	      8C
+TH1				  DATA	      8D
+TI				  BIT	      99
+TIMER0				  CODE	    000B
+TIMER1				  CODE	    001B
+TIMER_NOT_FINISH		  CODE	    034C	 470
+TL0				  DATA	      8A
+TL1				  DATA	      8B
+TMOD				  DATA	      89
+TR0				  BIT	      8C
+TR1				  BIT	      8E
+TRY_AGAIN_MESSAGE		  CODE	    047F	 590
+TRY_AGAIN_PRINT			  CODE	    0387	 542
+TXD				  BIT	      B1
+VIEW_LED			  CODE	    0279	 242
+WON				  CODE	    0465	 586
+WR				  BIT	      B6
+Z				  CODE	    039B	 562
